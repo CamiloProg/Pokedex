@@ -5,6 +5,8 @@ import Icon from "react-native-vector-icons/FontAwesome5"
 import Favorites from "../screens/Favorites"
 import Account from "../screens/Account"
 import Pokedex from "../screens/Pokedex"
+import Pokemon from '../screens/Pokemon'
+import PokedexNavigation from './PokedexNavigation'
 const Tab = createBottomTabNavigator();
 
 export default function Navigation() {
@@ -16,7 +18,7 @@ export default function Navigation() {
           <Icon name="heart" color={color} size={size} />
         )
       }} />
-      <Tab.Screen name="Pokedex" component={Pokedex} options={{
+      <Tab.Screen name="Pokedex" component={PokedexNavigation} options={{
         tabBarLabel: "",
         headerShown: false,
         tabBarIcon: () => renderPokeball()
