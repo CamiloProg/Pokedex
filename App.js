@@ -3,11 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import Navigation from './src/navigation/Navigation';
 import { View, Text } from 'react-native';
 import PokedexNavigation from './src/navigation/PokedexNavigation';
-
+import { AuthProvider } from './src/context/AuthContext'
 export default function App() {
   return (
     <NavigationContainer>
-      <Navigation />
-    </NavigationContainer>
+      <AuthProvider>
+        <Navigation />
+      </AuthProvider>
+    </NavigationContainer >
   );
 }

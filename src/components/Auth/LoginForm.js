@@ -1,67 +1,85 @@
-import { StyleSheet, Text, View, TextInput, Button, Keyboard } from 'react-native'
-import React from 'react'
-import { useFormik } from 'formik';
-import * as Yup from "yup"
+
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Button,
+  Keyboard,
+} from "react-native";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { user, userDetails } from "../../utils/userDB";
+import useAuth from "../../hooks/useAuth";
 
 export default function LoginForm() {
+  const [error, setError] = useState("");
+  const { login } = useAuth();
+
   const formik = useFormik({
     initialValues: initialValues(),
     validationSchema: Yup.object(validationSchema()),
     validateOnChange: false,
     onSubmit: (formValue) => {
-      console.log(formValue)
-    }
-  })
+      setError("");
+      const { username, password } = formValue;
+
+      if (username !== user.username || password !== user.password) {
+        setError("El usuario o la contraseña no son correcto");
+      } else {
+        login(userDetails);
+      }
+    },
+  });
+
   return (
     <View>
-      <Text style={styles.title}>Sign in</Text>
+      <Text style={styles.title}>Iniciar sesión</Text>
       <TextInput
-        placeholder='Username'
+        placeholder="Nombre de usuario"
         style={styles.input}
-        autoCapitalize={'none'}
+        autoCapitalize="none"
         value={formik.values.username}
-        onChangeText={(text) => formik.setFieldValue('username', text)}
+        onChangeText={(text) => formik.setFieldValue("username", text)}
       />
       <TextInput
-        placeholder='Password'
-        autoCapitalize='none'
+        placeholder="Contraseña"
         style={styles.input}
+        autoCapitalize="none"
         secureTextEntry={true}
         value={formik.values.password}
-        onChangeText={(text) => formik.setFieldValue('password', text)}
+        onChangeText={(text) => formik.setFieldValue("password", text)}
       />
-      <Button title='Join' onPress={formik.handleSubmit} style={styles.button} />
+      <Button title="Entrar" onPress={formik.handleSubmit} />
 
-      <Text style={styles.error}>
-        {formik.errors.username}
-      </Text>
+      <Text style={styles.error}>{formik.errors.username}</Text>
+      <Text style={styles.error}>{formik.errors.password}</Text>
 
-      <Text style={styles.error}>
-        {formik.errors.password}
-      </Text>
+      <Text style={styles.error}>{error}</Text>
     </View>
-  )
+  );
 }
 
 function initialValues() {
   return {
     username: "",
-    password: ""
-  }
+    password: "",
+  };
 }
 
 function validationSchema() {
   return {
-    username: Yup.string().required("Username is required"),
-    password: Yup.string().required("Password is required")
-  }
+    username: Yup.string().required("El usuario es obligatorio"),
+    password: Yup.string().required("La contraseña es obligatoria"),
+  };
 }
 
 const styles = StyleSheet.create({
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 50,
     marginBottom: 15,
   },
@@ -73,8 +91,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   error: {
-    textAlign: 'center',
-    color: 'red',
+    textAlign: "center",
+    color: "#f00",
     marginTop: 20,
-  }
-})
+  },
+});

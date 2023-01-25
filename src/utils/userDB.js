@@ -1,6 +1,6 @@
 export const user ={
-username: 'camilin2001',
-passwor: '123456'
+username: 'camilin',
+password: '123456'
 }
 
 export const userDetails = {
