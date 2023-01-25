@@ -5,11 +5,20 @@ import Header from '../components/Pokemon/Header';
 import { ScrollView } from 'react-native-gesture-handler';
 import Type from '../components/Pokemon/Type';
 import Stats from '../components/Pokemon/Stats';
+import Icon from "react-native-vector-icons/FontAwesome5"
+
 export default function Pokemon(props) {
   const { navigation, route: { params } } = props;
-  console.log(params.id);
 
   const [pokemon, setPokemon] = useState(null)
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Icon name="heart" color="#fff" size={20} style={{ marginRight: 20 }} />,
+      headerLeft: () => <Icon name="arrow-left" color="#fff" size={20} style={{ marginLeft: 20 }} onPress={navigation.goBack} />
+
+    })
+  }, [navigation, params])
 
   useEffect(() => {
     (async () => {
