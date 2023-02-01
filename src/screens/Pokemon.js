@@ -6,19 +6,21 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Type from '../components/Pokemon/Type';
 import Stats from '../components/Pokemon/Stats';
 import Icon from "react-native-vector-icons/FontAwesome5"
+import useAuth from '../hooks/useAuth';
+import Favorite from '../components/Pokemon/Favorite';
 
 export default function Pokemon(props) {
   const { navigation, route: { params } } = props;
 
   const [pokemon, setPokemon] = useState(null)
-
+  const { auth } = useAuth();
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <Icon name="heart" color="#fff" size={20} style={{ marginRight: 20 }} />,
+      headerRight: () => auth && <Favorite id={pokemon?.id} />,
       headerLeft: () => <Icon name="arrow-left" color="#fff" size={20} style={{ marginLeft: 20 }} onPress={navigation.goBack} />
 
     })
-  }, [navigation, params])
+  }, [navigation, params, pokemon])
 
   useEffect(() => {
     (async () => {

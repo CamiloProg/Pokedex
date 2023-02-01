@@ -51,7 +51,7 @@ export default function LoginForm() {
         value={formik.values.password}
         onChangeText={(text) => formik.setFieldValue("password", text)}
       />
-      <Button title="Entrar" onPress={formik.handleSubmit} />
+      <Button title="Log in" onPress={formik.handleSubmit} />
 
       <Text style={styles.error}>{formik.errors.username}</Text>
       <Text style={styles.error}>{formik.errors.password}</Text>
