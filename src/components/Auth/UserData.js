@@ -1,41 +1,55 @@
-import { StyleSheet, Text, View, Button } from 'react-native'
-import React from 'react'
-import { getPokemonFavoriteApi } from "../../api/favorite";
-import useAuth from "../../hooks/useAuth"
+import React, { useState, useCallback } from "react";
+import { StyleSheet, View, Text, Button } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { size } from "lodash";
+import useAuth from "../../hooks/useAuth";
+import { getPokemonsFavoriteApi } from "../../api/favorite";
+
 export default function UserData() {
-  const favorites = async () => {
-    const response = await getPokemonFavoriteApi()
-    const favorite = response.lenght
-    return favorite;
-  }
-  console.log(favorites);
   const { auth, logOut } = useAuth();
+  const [total, setTotal] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        try {
+          const response = await getPokemonsFavoriteApi();
+          setTotal(size(response));
+        } catch (error) {
+          setTotal(0);
+        }
+      })();
+    }, [])
+  );
 
   return (
     <View style={styles.content}>
       <View style={styles.titleBlock}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>Welcome,</Text>
         <Text style={styles.title}>{`${auth.firstName} ${auth.lastName}`}</Text>
       </View>
+
       <View style={styles.dataContent}>
-        <ItemMenu title="Name:" text={`${auth.firstName} ${auth.lastName}`} />
-        <ItemMenu title="Username:" text={`${auth.username} `} />
-        <ItemMenu title="Email:" text={`${auth.email} `} />
-        <ItemMenu title="Favorites:" text={`favorite ${favorite}`} />
+        <ItemMenu title="Name" text={`${auth.firstName} ${auth.lastName}`} />
+        <ItemMenu title="Username" text={auth.username} />
+        <ItemMenu title="Email" text={auth.email} />
+        <ItemMenu title="Favorites" text={`${total} pokemons`} />
       </View>
-      <Button title='Log Out' onPress={logOut} />
+
+      <Button title="Log out" onPress={logOut} style={styles.btnLogoun} />
     </View>
-  )
+  );
 }
 
 function ItemMenu(props) {
   const { title, text } = props;
+
   return (
-    <View style={styles.ItemMenu}>
-      <Text style={styles.ItemMenuTitle}>{title}</Text>
+    <View style={styles.itemMenu}>
+      <Text style={styles.itemMenuTitle}>{title}:</Text>
       <Text>{text}</Text>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -44,25 +58,27 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   titleBlock: {
-    marginBottom: 20
+    marginBottom: 30,
   },
   title: {
     fontWeight: "bold",
-    fontSize: 22
+    fontSize: 22,
   },
   dataContent: {
     marginBottom: 20,
-
   },
-  ItemMenu: {
-    flexDirection: 'row',
+  itemMenu: {
+    flexDirection: "row",
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderColor: '#CFCFCF'
+    borderColor: "#CFCFCF",
   },
-  ItemMenuTitle: {
-    fontWeight: 'bold',
+  itemMenuTitle: {
+    fontWeight: "bold",
     paddingRight: 10,
-    width: 120
-  }
-})
+    width: 120,
+  },
+  btnLogoun: {
+    paddingTop: 20,
+  },
+});

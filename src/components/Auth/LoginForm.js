@@ -26,7 +26,7 @@ export default function LoginForm() {
       const { username, password } = formValue;
 
       if (username !== user.username || password !== user.password) {
-        setError("El usuario o la contraseña no son correcto");
+        setError("username or password are not correct");
       } else {
         login(userDetails);
       }
@@ -35,16 +35,16 @@ export default function LoginForm() {
 
   return (
     <View>
-      <Text style={styles.title}>Iniciar sesión</Text>
+      <Text style={styles.title}>Sign in</Text>
       <TextInput
-        placeholder="Nombre de usuario"
+        placeholder="Username"
         style={styles.input}
         autoCapitalize="none"
         value={formik.values.username}
         onChangeText={(text) => formik.setFieldValue("username", text)}
       />
       <TextInput
-        placeholder="Contraseña"
+        placeholder="Password"
         style={styles.input}
         autoCapitalize="none"
         secureTextEntry={true}
@@ -70,8 +70,8 @@ function initialValues() {
 
 function validationSchema() {
   return {
-    username: Yup.string().required("El usuario es obligatorio"),
-    password: Yup.string().required("La contraseña es obligatoria"),
+    username: Yup.string().required("Username is neccesary"),
+    password: Yup.string().required("You must to put a password"),
   };
 }
 
